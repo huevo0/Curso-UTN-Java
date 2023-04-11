@@ -18,8 +18,8 @@ public class main {
 				
 				Carrito Compra = new Carrito();
 				Compra.setI1(item1);
-				Compra.setI1(item2);
-				Compra.setI1(item3);
+				Compra.setI2(item2);
+				Compra.setI3(item3);
 				Compra.setPrecioCarrito((item1.getCantidad() * producto1.getPrecio()) +  (item2.getCantidad() * producto2.getPrecio()) + (item3.getCantidad() * producto3.getPrecio()));
 				Compra.setCantprod(item1.getCantidad() + item2.getCantidad() + item3.getCantidad());
 				
