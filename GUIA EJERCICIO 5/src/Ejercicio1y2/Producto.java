@@ -5,8 +5,8 @@ public class Producto {
 	private double precio;
 	public Producto(String nombre, double precio) {
 		super();
-		nombre = nombre;
-		precio = precio;
+		this.nombre = nombre;
+		this.precio = precio;
 	}
 		
 	public Producto() {
