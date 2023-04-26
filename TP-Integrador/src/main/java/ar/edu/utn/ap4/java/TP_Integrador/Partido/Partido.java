@@ -1,11 +1,16 @@
 package ar.edu.utn.ap4.java.TP_Integrador.Partido;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import ar.edu.utn.ap4.java.TP_Integrador.ConexionBD.ConexionBD;
 import ar.edu.utn.ap4.java.TP_Integrador.Equipo.Equipo;
@@ -30,11 +35,18 @@ public class Partido {
 		public Partido(int idPartido, int ronda, int golesA, int golesB) {
 			super();
 			this.idPartido = idPartido;
-			Ronda = ronda;
+			this.Ronda = ronda;
+			this.GolesA = golesA;
+			this.GolesB = golesB;
+		}
+		
+		public Partido(int golesA, int golesB) {
+			super();
 			GolesA = golesA;
 			GolesB = golesB;
 		}
-
+		
+		
 		public Partido() {
 			super();
 		}
@@ -74,6 +86,58 @@ public class Partido {
 		public void setGolesB(int golesB) {
 			GolesB = golesB;
 		}
+		
+		public static List<Partido> importarPartidosCSV(){
+			
+			List<Partido>partidos = new ArrayList<Partido>();
+			try {
+					String archivo = "Goles.csv" ;
+					for (String linea : Files.readAllLines(Paths.get(archivo))){
+					
+						int GolesA = Integer.parseInt(linea.substring(0,1));
+						int GolesB = Integer.parseInt(linea.substring(2));
+						partidos.add(new Partido(GolesA, GolesB));
+					}
+			
+			System.out.println("############################ LISTADO DE GOLES DEL ARCHIVO .CSV ############################");
+			for(Partido pa : partidos) {
+				System.out.println(pa.getGolesA()+"\t\t"+pa.getGolesB());
+			}		
+			}catch(IOException i){i.printStackTrace();}
+			
+			return partidos;
+		}
+		
+		
+		
+		public static void insertaPartidosMySQL(List<Partido> partidos) {
+			System.out.println("############################ SE INSERTARAN LOS GOLES DE CADA PARTIDO EN MySQL ############################");
+			ConexionBD conectar= new ConexionBD();
+			Connection con = conectar.Conectar();
+			
+			String Query = "UPDATE `ronda` SET `GolesA`=?,`GolesB`=? WHERE `idPartido`=?";
+		
+					
+			try {
+				PreparedStatement ps= con.prepareStatement(Query);
+				
+				for(int i=0 ; i<partidos.size() ; i++) {
+					System.out.println("tamaño de partido"+ partidos.size());
+					System.out.println("GolesA\t"+ partidos.get(i).getGolesA());
+					System.out.println("GolesB\t"+ partidos.get(i).getGolesB());
+					ps.setInt(1, partidos.get(i).getGolesA());
+					ps.setInt(2, partidos.get(i).getGolesB());
+					ps.setInt(3,i);
+					ps.executeUpdate();
+					
+					System.out.println("SE ACTUALIZARON LAS RONDAS CON RESULTADOS EN MySql \t"+ (i+1) + "/" + partidos.size());
+					}
+				ps.close();
+				con.close();
+			} catch(SQLException s) {}
+		}
+		
+		
 		public static ArrayList<Partido> consultarPartidosbd(ArrayList<Equipo> equipos){
 			ArrayList<Partido>partidos=new ArrayList<Partido>();
 			System.out.println("###########################");

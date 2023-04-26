@@ -15,11 +15,20 @@ public class main {
 
 	public static void main(String[] args) {
 
-		ArrayList<Equipo>equipos = Equipo.consultarEquiposbd();
-		ArrayList<Partido>partidos = Partido.consultarPartidosbd( equipos);
-		ArrayList<Pronostico>resultados = Pronostico.verResultados(equipos , partidos);
-		ArrayList<Pronostico>participante1 = Participante.cargaParticipante("Mariana",equipos ,partidos); 
-		ArrayList<Pronostico>participante2 = Participante.cargaParticipante("Pedro", equipos ,partidos);
+		List<Equipo>equiposCSV=new ArrayList<Equipo>();
+		equiposCSV = Equipo.importarEquiposCSV();
+		Equipo.insertaEquiposMySQL(equiposCSV);
+		List<Partido>partidosCSV=new ArrayList<Partido>();
+		partidosCSV = Partido.importarPartidosCSV();
+		Partido.insertaPartidosMySQL(partidosCSV);
+		
+		
+		
+		ArrayList<Equipo>equiposSQL = Equipo.consultarEquiposbd();
+		ArrayList<Partido>partidosSQL = Partido.consultarPartidosbd( equiposSQL);
+		ArrayList<Pronostico>resultados = Pronostico.verResultados(equiposSQL , partidosSQL);
+		ArrayList<Pronostico>participante1 = Participante.cargaParticipante("Mariana",equiposSQL ,partidosSQL); 
+		ArrayList<Pronostico>participante2 = Participante.cargaParticipante("Pedro", equiposSQL ,partidosSQL);
 		int aciertosMariana = Pronostico.verAciertos(participante1 , resultados);
 		int aciertosPedro = Pronostico.verAciertos(participante2 , resultados);
 		
