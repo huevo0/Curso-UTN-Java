@@ -1,0 +1,5 @@
+bd=tp-integrador
+url=jdbc:mysql://localhost:3306/tp-integrador
+user=root
+password=
+driver=com.mysql.cj.jdbc.Driver

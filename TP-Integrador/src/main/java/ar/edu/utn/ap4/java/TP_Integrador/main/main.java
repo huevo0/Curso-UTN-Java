@@ -2,6 +2,7 @@ package ar.edu.utn.ap4.java.TP_Integrador.main;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.*;
@@ -15,6 +16,8 @@ public class main {
 
 	public static void main(String[] args) {
 
+		
+		
 		List<Equipo>equiposCSV=new ArrayList<Equipo>();
 		equiposCSV = Equipo.importarEquiposCSV();
 		Equipo.insertaEquiposMySQL(equiposCSV);
